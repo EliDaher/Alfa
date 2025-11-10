@@ -12,7 +12,6 @@ export default function POSPayments() {
     const [isOpen, setIsOpen] = useState(false);
     const [formTitle] = useState('تأكيد الدفعة');
     const [selectedRow, setSelectedRow] = useState<any | null>(null);
-    const [loading, setLoading] = useState(false)
 
     const queryClient = useQueryClient();
     
@@ -76,7 +75,6 @@ export default function POSPayments() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                setLoading(true);
                 if (selectedRow) {
                   confirmMutation.mutate({
                     id: selectedRow._id,
@@ -85,7 +83,6 @@ export default function POSPayments() {
                   });
                 }
                 setIsOpen(false);
-                setLoading(false);
               }}
               className="space-y-4 w-full"
             >
@@ -95,8 +92,8 @@ export default function POSPayments() {
                   <strong className="text-lg">{selectedRow.name}</strong>
                 </p>
               )}
-              <Button disabled={loading ? true : false} type="submit">
-                {loading ? "تأكيد قبول الدفعة" : "جاري التأكيد"}
+              <Button disabled={confirmMutation.isPending ? true : false} type="submit">
+                {!confirmMutation.isPending ? "تأكيد قبول الدفعة" : "جاري التأكيد"}
               </Button>
             </form>
           </div>
