@@ -2,9 +2,25 @@ import { Link } from "react-router-dom";
 import { Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useEffect, useMemo } from "react";
 
 const NotFound = () => {
-  const daherUser = JSON.parse(localStorage.getItem('DaherUser'))
+  const storedUser = localStorage.getItem("DaherUser");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+
+  const isDashboardAccess = useMemo(
+    () => ["admin", "dealer"].includes(user?.role),
+    [user?.role],
+  );
+
+  const primaryRoute = isDashboardAccess
+    ? "/dashboard"
+    : "/PendingTransactions";
+  const primaryLabel = isDashboardAccess ? "Go to Dashboard" : "Go to Pending Transaction";
+
+  useEffect(()=>{
+    console.log(user);
+  }, [user])
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/20 p-4">
       <Card className="w-full max-w-md">
@@ -17,18 +33,24 @@ const NotFound = () => {
               Page Not Found
             </h1>
             <p className="text-muted-foreground mb-6">
-              The page you're looking for doesn't exist or has been moved.
+              The page you&apos;re looking for doesn&apos;t exist or has been
+              moved.
             </p>
           </div>
 
           <div className="space-y-3">
             <Button asChild className="w-full">
-              <Link to={['admin', 'dealer'].includes(daherUser.role) ? `/dashboard` : '/invoices'}>
+              <Link to={primaryRoute}>
                 <Home className="mr-2 h-4 w-4" />
-                {['admin', 'dealer'].includes(daherUser.role) ? 'Go to Dashboard' : 'Go to Invoices'}
+                {primaryLabel}
               </Link>
             </Button>
-            <Button variant="outline" onClick={() => window.history.back()}>
+
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => window.history.back()}
+            >
               <ArrowLeft className="mr-2 h-4 w-4" />
               Go Back
             </Button>

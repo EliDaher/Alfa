@@ -30,7 +30,7 @@ export default function ScreenWrapper({ title, children }: any) {
           sparkCount={8}
           duration={400}
           >
-          <div className="animate-fade-in text-white">
+          <div className="animate-fade-in text-white bg-background">
             {children}
           </div>
         </ClickSpark>

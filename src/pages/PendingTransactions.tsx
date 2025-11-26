@@ -18,7 +18,7 @@ export default function PendingTransactions() {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const newSocket = io("https://paynet-1.onrender.com");
+    const newSocket = io("https://paynet-main-nasar.onrender.com");
     setSocket(newSocket);
 
     newSocket.on("pendingPaymentsUpdate", (updatedPayments) => {
@@ -63,6 +63,7 @@ export default function PendingTransactions() {
     { key: 'speed', label: 'السرعة', sortable: true },
     { key: 'email', label: 'الحساب المرسل', sortable: true },
     { key: 'amount', label: 'المبلغ الواجب دفعه', sortable: true },
+    { key: 'takenAmount', label: 'المبلغ المطلوب من نقطة البيع', sortable: true },
     { key: 'status', label: 'حالة العملية', sortable: true },
     { key: 'createdAt', label: 'الوقت', sortable: true },
   ];
@@ -155,7 +156,14 @@ export default function PendingTransactions() {
           title="تسديدات معلقة"
           description=""
           columns={invoicesColumns}
-          data={pendingData || []}
+          data={pendingData ? 
+            pendingData.map(p => {
+              return{ 
+                ...p,
+                takenAmount: (p.amount * 0.05) + (p.amount),
+              };
+            })
+          : []}
           renderRowActions={(row) => (
             row.status != 'جاري التسديد' ? (
             <div className="flex gap-2">

@@ -77,7 +77,7 @@ export default function Dashboard() {
   
 
   useEffect(() => {
-    const newSocket = io("https://paynet-1.onrender.com");
+    const newSocket = io("https://paynet-main-nasar.onrender.com");
     setSocket(newSocket);
 
     newSocket.on("pendingPaymentsUpdate", (updatedPayments) => {

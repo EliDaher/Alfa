@@ -120,6 +120,9 @@ export function DataTable({
     if (key === "balance") {
       return <span>{value.toFixed(0)}</span>;
     }
+    if (key === "takenAmount") {
+      return <span className="text-lg">{value.toFixed(0)}</span>;
+    }
     return value;
   };
 
@@ -207,9 +210,9 @@ export function DataTable({
 
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center space-x-2">
-            <span className="text-sm text-muted-foreground">عدد الاسطر :</span>
+            <span className=" text-sm text-muted-foreground">عدد الاسطر :</span>
             <select
-              className="border rounded px-2 py-1 text-sm"
+              className="border rounded px-2 py-1 text-sm bg-background"
               value={pageSize}
               onChange={(e) => {
                 setPageSize(Number(e.target.value));

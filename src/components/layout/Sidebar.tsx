@@ -32,7 +32,7 @@ const navigationGroups = [
       { name: "Users", href: "/POSUsers", icon: User, allowed: ["admin"] },
       { name: "Pending Transactions", href: "/PendingTransactions", icon: FileText, allowed: ["admin", "employee"] },
       { name: "Done Transactions", href: "/DoneTransactions", icon: CheckIcon, allowed: ["admin", "employee"] },
-      { name: "Payments", href: "/POSPayments", icon: ArrowDownCircle, allowed: ["admin", "employee"] },
+      { name: "Payments", href: "/POSPayments", icon: ArrowDownCircle, allowed: ["admin"] },
     ],
     allowed: ["admin", "employee"]
   },
