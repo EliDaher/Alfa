@@ -19,7 +19,7 @@ export default function Login() {
     if (res?.message.includes('successful')) {
       localStorage.setItem("DaherUser", JSON.stringify(res.user));
       if(res.user.role == 'employee'){
-        navigate('/invoices')
+        navigate("/PendingTransactions");
       }else {
         navigate("/dashboard");
       }
