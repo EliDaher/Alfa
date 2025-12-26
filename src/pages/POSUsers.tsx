@@ -12,9 +12,17 @@ import getPOSUsers, {
 } from "@/services/pos";
 import { dividerClasses } from "@mui/material/Divider";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export default function POSUsers() {
+
+  const [daherUser, setDaherUser] = useState<Record<string, any> | null>(null);
+  
+  useEffect(()=>{
+    const temUser = JSON.parse(localStorage.getItem("DaherUser") || "null");
+    setDaherUser(temUser)
+  },[])
+
   const [amount, setAmount] = useState(0);
   const [openUserId, setOpenUserId] = useState(null);
   const [openUserId2, setOpenUserId2] = useState(null);
@@ -141,6 +149,8 @@ export default function POSUsers() {
           columns={posColumns}
           data={posData}
           renderRowActions={(row) => (
+            (daherUser?.username == "Alfa") ?
+            (
             <div className="flex gap-2">
               <PopupForm
                 title="اضافة دفعة لنقطة البيع"
@@ -243,6 +253,7 @@ export default function POSUsers() {
                 </div>
               </PopupForm>
             </div>
+            ) : null  
           )}
         />
 
@@ -252,25 +263,25 @@ export default function POSUsers() {
           columns={debtColumns}
           data={debtData}
           renderRowActions={(row) => {
-            return (
-              <>
-                <Button
-                  disabled={endDebtMutation.isPending}
-                  onClick={() => {
-                    window.confirm("هل انت متأكد من العملية ؟") &&
-                      endDebtMutation.mutate({
-                        id: row._id,
-                        email: row.email,
-                        amount: row.amount,
-                      });
-                  }}
-                >
-                  {endDebtMutation.isPending
-                    ? "جاري الانهاء..."
-                    : "انهاء الدين"}
-                </Button>
-              </>
-            );
+              return (
+                <>
+                  <Button
+                    disabled={endDebtMutation.isPending}
+                    onClick={() => {
+                      window.confirm("هل انت متأكد من العملية ؟") &&
+                        endDebtMutation.mutate({
+                          id: row._id,
+                          email: row.email,
+                          amount: row.amount,
+                        });
+                    }}
+                  >
+                    {endDebtMutation.isPending
+                      ? "جاري الانهاء..."
+                      : "انهاء الدين"}
+                  </Button>
+                </>
+              );
           }}
         />
       </div>
