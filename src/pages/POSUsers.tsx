@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import getPOSUsers, {
   addPOSPayment,
   addPOSUser,
+  deleteDebt,
   endPOSDebt,
   getPOSDebt,
 } from "@/services/pos";
@@ -72,6 +73,21 @@ export default function POSUsers() {
     mutationFn: endPOSDebt,
     onSuccess: () => {
       alert("تم انهاء الدين.");
+      queryClient.invalidateQueries({
+        queryKey: ["POSdebt-table"],
+      });
+      setOpenUserId(null);
+      setAmount(0);
+    },
+    onError: () => {
+      alert("حدث خطأ أثناء الإرسال.");
+    },
+  });
+  
+  const deleteDebtMutation = useMutation({
+    mutationFn: deleteDebt,
+    onSuccess: () => {
+      alert("تم حذف الدفعة.");
       queryClient.invalidateQueries({
         queryKey: ["POSdebt-table"],
       });
@@ -264,7 +280,7 @@ export default function POSUsers() {
           data={debtData}
           renderRowActions={(row) => {
               return (
-                <>
+                <div className="flex gap-2">
                   <Button
                     disabled={endDebtMutation.isPending}
                     onClick={() => {
@@ -280,7 +296,19 @@ export default function POSUsers() {
                       ? "جاري الانهاء..."
                       : "انهاء الدين"}
                   </Button>
-                </>
+                  <Button
+                    variant="destructive"
+                    disabled={deleteDebtMutation.isPending}
+                    onClick={() => {
+                      window.confirm("هل انت متأكد من العملية ؟") &&
+                        deleteDebtMutation.mutate(row._id);
+                    }}
+                  >
+                    {deleteDebtMutation.isPending
+                      ? "جاري الانهاء..."
+                      : "الغاء الدفعة"}
+                  </Button>
+                </div>
               );
           }}
         />

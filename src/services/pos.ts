@@ -48,6 +48,16 @@ export async function endPOSDebt({id, email, amount}) {
     }
 }
 
+export async function deleteDebt(id: string) {
+    try {
+        const res = await invoiceClient.delete(`/admin/delete/${id}`);
+        return res.data;
+    } catch (error) {
+        console.error("Error getting invoices:", error);
+        return { success: false, error };
+    }
+}
+
 export async function addPOSUser({formData, email}) {
     try {
         const res = await invoiceClient.post(`/api/point/add-point`,{
