@@ -1,4 +1,4 @@
-import { invoiceClient, localClient } from "@/lib/axios";
+import { invoiceClient } from "@/lib/axios";
 
 
 export default async function getPOSUsers() {
@@ -60,7 +60,7 @@ export async function deleteDebt(id: string) {
 
 export async function cancelDebt(id:string) {
     try {
-        const res = await localClient.put(`/api/admin/cancel-daen/${id}`);
+        const res = await invoiceClient.put(`/api/admin/cancel-daen/${id}`);
         return res.data;
     } catch (error) {
         console.error("Error getting invoices:", error);
