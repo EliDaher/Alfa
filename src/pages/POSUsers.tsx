@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import getPOSUsers, {
   addPOSPayment,
   addPOSUser,
+  cancelDebt,
   deleteDebt,
   endPOSDebt,
   getPOSDebt,
@@ -83,7 +84,22 @@ export default function POSUsers() {
       alert("حدث خطأ أثناء الإرسال.");
     },
   });
-  
+
+  const cancelDebtMutation = useMutation({
+    mutationFn: cancelDebt,
+    onSuccess: () => {
+      alert("تم إلغاء الدين.");
+      queryClient.invalidateQueries({
+        queryKey: ["POSdebt-table"],
+      });
+      setOpenUserId(null);
+      setAmount(0);
+    },
+    onError: () => {
+      alert("حدث خطأ أثناء الإرسال.");
+    },
+  });
+
   const deleteDebtMutation = useMutation({
     mutationFn: deleteDebt,
     onSuccess: () => {
@@ -307,6 +323,18 @@ export default function POSUsers() {
                     {deleteDebtMutation.isPending
                       ? "جاري الانهاء..."
                       : "الغاء الدفعة"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    disabled={cancelDebtMutation.isPending}
+                    onClick={() => {
+                      window.confirm("هل انت متأكد من العملية ؟") &&
+                        cancelDebtMutation.mutate(row._id);
+                    }}
+                  >
+                    {cancelDebtMutation.isPending
+                      ? "جاري الإلغاء..."
+                      : "إلغاء الدين"}
                   </Button>
                 </div>
               );
